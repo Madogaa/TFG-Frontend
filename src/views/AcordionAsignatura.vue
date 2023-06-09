@@ -62,7 +62,7 @@ export default {
     },
     toggle (subject) {
       if (!subject.publications.length) {
-        axios.get(`http://143.47.50.240:80/APIdotshare/publicaciones/perfil/${subject.idAsignatura}`)
+        axios.get(`http://143.47.50.240:80/APIdotshare/publicaciones/perfil/${subject.idAsignatura}/${this.idPerfil}`)
           .then(response => {
             subject.publications = response.data
           })
