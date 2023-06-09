@@ -10,7 +10,7 @@
             <div v-if="this.showButtoms" @click="setting" class="settings">
               <img src="../assets/setting.png" />
             </div>
-            <div v-if="!this.showButtoms && showSigue" @click="follow" class="follow">
+            <div :key="showSigue" v-if="!this.showButtoms && showSigue" @click="follow" class="follow">
               <p>Seguir</p>
             </div>
             <div class="profile__img">
@@ -124,8 +124,7 @@ export default {
       http.post(`http://143.47.50.240:80/APIdotshare/perfil/${perfilId}/seguir/${seguidoId}`)
         .then((response) => response.data)
         .then(response => {
-          location.reload()
-          bus.emit('actualizaPerfil', false)
+          this.showSigue = false
         })
     },
     handleActualizaPublicaciones () {

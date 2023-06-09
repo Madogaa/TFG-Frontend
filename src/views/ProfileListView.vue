@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-      <div class="row" v-for="view in views" :key="view.idPerfil">
+      <div :key="this.someDeleted">
+        <div class="row" v-for="view in views" :key="view.idPerfil">
         <router-link  class="rlink col-11" :to="'/profile/' + view.nick">
             <img v-if="view.loaded" class="profile__img" :src="view.imageUrl" alt="">
             <img v-if="!view.loaded" class="profile__img" src="../assets/default.png" alt="">
@@ -14,6 +15,7 @@
           <div class="h-26">
             <img src="../assets/borrar.png" alt="">
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -37,7 +39,8 @@ export default {
   data () {
     return {
       views: [],
-      showDelete: false
+      showDelete: false,
+      someDeleted: 0
     }
   },
   mounted () {
@@ -68,8 +71,7 @@ export default {
             }
           ).then((response) => response.data)
             .then(response => {
-              location.reload()
-              console.log(response)
+              this.views = this.views.filter(view => view.idPerfil !== seguidor)
             })
         })
     },
