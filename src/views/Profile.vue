@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <my-modal :idPerfil="perfil.idPerfil" :user="id" @cierra="cierra" v-if="showModal"></my-modal>
-    <my-modal-setting :user="id" :idPerfil="perfil.idPerfil" @cierraSetting="cierraSetting" v-if="showSetting"></my-modal-setting>
-    <div class="profile">
+    <my-modal-setting :user="id" :idPerfil="perfil.idPerfil" @actualizaProfileImage="handleActualizaPerfil" @cierraSetting="cierraSetting" v-if="showSetting"></my-modal-setting>
+    <div :key="this.keyProfile" class="profile">
         <!-- Banner -->
         <div class="banner">
-          <img class="imgBanner" v-if="showImages" :src="this.imgBanner"  />
-          <img class="imgBanner" v-if="!showImages" src="../assets/default_banner.jpg"  />
+          <img class="imgBanner" v-if="showBanners" :src="this.imgBanner"  />
+          <img class="imgBanner" v-if="!showBanners" src="../assets/default_banner.jpg"  />
             <div v-if="this.showButtoms" @click="setting" class="settings">
               <img src="../assets/setting.png" />
             </div>
@@ -93,11 +93,13 @@ export default {
       showModal: false,
       showSetting: false,
       showImages: false,
+      showBanners: false,
       perfilLoaded: false,
       updatePublish: false,
       showButtoms: false,
       sessionuser: null,
-      showSigue: true
+      showSigue: true,
+      keyProfile: false
     }
   },
   mounted () {
@@ -109,6 +111,12 @@ export default {
   },
   methods: {
     checkSeguido () {
+    },
+    handleActualizaPerfil () {
+      console.log('algos')
+      this.getProfile()
+      this.keyProfile = !this.keyProfile
+      this.cierraSetting()
     },
     checkVisibility () {
       const user = JSON.parse(sessionStorage.getItem('user'))
@@ -148,14 +156,20 @@ export default {
               this.img = url
               this.showImages = true
             })
-            .catch((error) => console.log(error))
+            .catch((error) => {
+              this.showImages = false
+              console.log(error)
+            })
           const bannerRef = ref(storage, `perfil/${this.id}/${this.perfil.imgBanner}`)
           getDownloadURL(bannerRef)
             .then((url) => {
               this.imgBanner = url
               this.showBanners = true
             })
-            .catch((error) => console.log(error))
+            .catch((error) => {
+              this.showBanners = false
+              console.log(error)
+            })
           http(
             {
               method: 'GET',

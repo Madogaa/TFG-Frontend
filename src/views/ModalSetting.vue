@@ -89,8 +89,10 @@ export default {
         }
       )
         .then((response) => response.data)
-        .then(response => console.log(response))
-        .then(location.reload())
+        .then(response => {
+          console.log(response)
+          this.$emit('actualizaProfileImage', false)
+        })
         .catch((err) => console.log(err))
     },
     getImagen () {

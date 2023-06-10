@@ -79,7 +79,11 @@ export default {
                     nombre: this.userName
                   })
                   .then(e => {
-                    sessionStorage.setItem('user', JSON.stringify(e.data))
+                    e = e.data
+                    e.perfil = {
+                      idPerfil: e.idPerfil
+                    }
+                    sessionStorage.setItem('user', JSON.stringify(e))
                     this.$router.push({ name: 'alperfil', params: { id: this.userName } })
                     bus.emit('actualizaNav', false)
                   })
