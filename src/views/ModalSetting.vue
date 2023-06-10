@@ -74,12 +74,6 @@ export default {
         bus.emit('mostarError', errmsg)
         return
       }
-      const imgRef = ref(storage, `perfil/${this.user}/${this.imagen.name}`)
-      uploadBytes(imgRef, this.imagen)
-        .then(e => console.log(e))
-      const bannerRef = ref(storage, `perfil/${this.user}/${this.imgBanner.name}`)
-      uploadBytes(bannerRef, this.imgBanner)
-        .then(e => console.log(e))
       return http.post(
         `http://143.47.50.240:80/APIdotshare/perfilupdate/${this.idPerfil}`,
         {
@@ -91,7 +85,13 @@ export default {
         .then((response) => response.data)
         .then(response => {
           console.log(response)
-          this.$emit('actualizaProfileImage', false)
+          const imgRef = ref(storage, `perfil/${this.user}/${this.imagen.name}`)
+          uploadBytes(imgRef, this.imagen)
+            .then(e => {
+              const bannerRef = ref(storage, `perfil/${this.user}/${this.imgBanner.name}`)
+              uploadBytes(bannerRef, this.imgBanner)
+                .then(e => this.$emit('actualizaProfileImage', false))
+            })
         })
         .catch((err) => console.log(err))
     },
